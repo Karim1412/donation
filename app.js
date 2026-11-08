@@ -1,4 +1,16 @@
-import { firebaseConfig } from "./firebase-config.js";
+/* Show any JS error on screen (so it can be read directly on the phone) */
+function showFatal(msg) {
+  let box = document.getElementById("fatal");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "fatal";
+    box.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:99;background:#b91c1c;color:#fff;font:13px/1.4 monospace;padding:10px 12px;border-radius:10px;direction:ltr;text-align:left;word-break:break-word";
+    document.body.appendChild(box);
+  }
+  box.textContent = "ERROR: " + msg;
+}
+window.addEventListener("error", (e) => showFatal(e.message || "unknown error"));
+window.addEventListener("unhandledrejection", (e) => showFatal(String((e.reason && e.reason.message) || e.reason)));
 
 const GOAL = 15000;
 const RING_LEN = 2 * Math.PI * 96; // must match r=96 in index.html
@@ -6,9 +18,15 @@ const RING_LEN = 2 * Math.PI * 96; // must match r=96 in index.html
 /* ------------------------------------------------------------------ */
 /*  Data layer: Firebase (shared) or localStorage (demo fallback)      */
 /* ------------------------------------------------------------------ */
-const hasFirebase = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("PASTE");
-
 async function createStore() {
+  let firebaseConfig = {};
+  try {
+    firebaseConfig = (await import("./firebase-config.js")).firebaseConfig || {};
+  } catch (e) {
+    console.error("firebase-config.js problem", e);
+    showFatal("firebase-config.js has a mistake: " + e.message);
+  }
+  const hasFirebase = firebaseConfig.apiKey && !String(firebaseConfig.apiKey).startsWith("PASTE");
   if (hasFirebase) {
     try {
       const V = "10.12.2";
