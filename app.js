@@ -134,7 +134,7 @@ function render(list) {
     const av = document.createElement("div");
     av.className = "avatar";
     av.style.background = colorFor(d.name);
-    av.textContent = [...d.name.trim()][0]?.toUpperCase() || "?";
+    av.textContent = (Array.from(d.name.trim())[0] || "?").toUpperCase();
     const who = document.createElement("div");
     who.className = "who";
     const n = document.createElement("div"); n.className = "n"; n.textContent = d.name;
