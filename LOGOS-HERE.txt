@@ -1,0 +1,9 @@
+Put the two logo files in this folder with EXACTLY these names:
+
+  ieee-epi-sb.png          -> IEEE EPI SB logo
+  ieee-epi-cis-sbc.png     -> IEEE EPI CIS SBC logo
+
+(PNG with transparent background works best. SVG also works if you rename the
+ src in index.html.)
+
+Until the files are here, the app shows a text badge instead of each logo.
